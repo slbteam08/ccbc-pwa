@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import OneSignal from 'react-onesignal';
+import { useEffect, useRef } from "react";
+import OneSignal from "react-onesignal";
 
 /**
  * OneSignal initialization component
@@ -10,33 +10,35 @@ const OneSignalInit = () => {
 
   useEffect(() => {
     // Ensure this code runs only on the client side and hasn't been initialized yet
-    if (typeof window !== 'undefined' && !isInitialized.current) {
+    if (typeof window !== "undefined" && !isInitialized.current) {
       isInitialized.current = true;
       OneSignal.init({
         appId: import.meta.env.VITE_ONESIGNAL_APP_ID, // OneSignal App ID from environment variables
         serviceWorkerParam: {
-          scope: '/onesignal/'
+          scope: "/onesignal/",
         },
-        serviceWorkerPath: '/onesignal/OneSignalSDKWorker.js',
+        serviceWorkerPath: "/onesignal/OneSignalSDKWorker.js",
         notifyButton: {
           enable: true,
           prenotify: true,
           showCredit: true,
           text: {
-             'message.action.subscribed': 'Thanks for subscribing!',
-             'message.action.resubscribed': 'You\'re subscribed to notifications',
-             'message.action.unsubscribed': 'You won\'t receive notifications again',
-             'message.action.subscribing': 'Thanks for subscribing!',
-             'message.prenotify': 'Click to subscribe to notifications',
-             'dialog.main.title': 'Manage Site Notifications',
-             'dialog.main.button.subscribe': 'SUBSCRIBE',
-             'dialog.main.button.unsubscribe': 'UNSUBSCRIBE',
-             'dialog.blocked.title': 'Unblock Notifications',
-             'dialog.blocked.message': 'Follow these instructions to allow notifications:',
-             'tip.state.blocked': 'You\'ve blocked notifications',
-             'tip.state.subscribed': 'You\'re subscribed to notifications',
-             'tip.state.unsubscribed': 'Subscribe to notifications'
-           }
+            "message.action.subscribed": "Thanks for subscribing!",
+            "message.action.resubscribed": "You're subscribed to notifications",
+            "message.action.unsubscribed":
+              "You won't receive notifications again",
+            "message.action.subscribing": "Thanks for subscribing!",
+            "message.prenotify": "Click to subscribe to notifications",
+            "dialog.main.title": "Manage Site Notifications",
+            "dialog.main.button.subscribe": "SUBSCRIBE",
+            "dialog.main.button.unsubscribe": "UNSUBSCRIBE",
+            "dialog.blocked.title": "Unblock Notifications",
+            "dialog.blocked.message":
+              "Follow these instructions to allow notifications:",
+            "tip.state.blocked": "You've blocked notifications",
+            "tip.state.subscribed": "You're subscribed to notifications",
+            "tip.state.unsubscribed": "Subscribe to notifications",
+          },
         },
         allowLocalhostAsSecureOrigin: true, // For development
       });
