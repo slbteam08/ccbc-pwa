@@ -15,9 +15,9 @@ const OneSignalInit = () => {
       OneSignal.init({
         appId: import.meta.env.VITE_ONESIGNAL_APP_ID, // OneSignal App ID from environment variables
         serviceWorkerParam: {
-          scope: "/onesignal/",
+          scope: "/",
         },
-        serviceWorkerPath: "/onesignal/OneSignalSDKWorker.js",
+        serviceWorkerPath: "/OneSignalSDKWorker.js",
         notifyButton: {
           enable: true,
           prenotify: true,
