@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { apiSlice } from './apiSlice.js'
+import authReducer from './authSlice'
 
 /**
  * Configure the Redux store with RTK Query
@@ -9,6 +10,7 @@ import { apiSlice } from './apiSlice.js'
 export const store = configureStore({
   reducer: {
     api: apiSlice.reducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
