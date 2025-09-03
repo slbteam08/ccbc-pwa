@@ -29,9 +29,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
+.trae
+.vercel
 # Local Netlify folder
 .netlify
+playwright-report
 
 # Test result
 test-results
