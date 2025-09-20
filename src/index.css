@@ -1,13 +1,18 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Swiper styles */
+@import "swiper/css";
+@import "swiper/css/navigation";
+@import "swiper/css/pagination";
+
 @custom-variant dark (&:is(.dark *));
 
 /* Custom styles */
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: inherit;
@@ -141,4 +146,25 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.custom-bullet {
+  width: 66px !important;
+  height: 7px !important;
+  background: #b1b2b5 !important;
+  border-radius: 0 !important;
+  margin: 0 6px !important;
+  opacity: 1 !important;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-bullet-active {
+  background: #dcdcdc !important;
+}
+
+.custom-pagination {
+  position: static !important;
+  width: auto !important;
+  margin-top: 1.5rem !important;
 }
