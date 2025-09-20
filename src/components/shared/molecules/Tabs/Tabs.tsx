@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
+import Icon from "@/components/shared/atoms/Icons/Icon";
+import type { IconName } from "@/components/shared/atoms/Icons/iconList";
 
 /**
  * Tab item interface for defining individual tab properties
@@ -7,7 +9,7 @@ import { cn } from "@/lib/utils";
 interface TabItem {
   id: string;
   label: string;
-  icon?: React.ReactNode;
+  icon?: React.ReactNode | IconName;
   content?: React.ReactNode;
 }
 
@@ -31,7 +33,7 @@ const Tabs: React.FC<TabsProps> = ({
   defaultActiveTab,
   onTabChange,
   className,
-  variant = "default"
+  variant = "default",
 }) => {
   const [activeTab, setActiveTab] = useState(defaultActiveTab || items[0]?.id);
 
@@ -43,39 +45,50 @@ const Tabs: React.FC<TabsProps> = ({
     onTabChange?.(tabId);
   };
 
-  const activeTabContent = items.find(item => item.id === activeTab)?.content;
+  const activeTabContent = items.find((item) => item.id === activeTab)?.content;
 
   if (variant === "bottom-menu") {
     return (
-      <div className={cn("w-full", className)}>
+      <div className={cn("w-full h-full flex flex-col", className)}>
         {/* Tab Content */}
-        <div className="flex-1 p-4">
-          {activeTabContent}
-        </div>
-        
-        {/* Bottom Menu Tabs */}
-        <div className="bg-white border-t border-gray-200 px-2 py-2">
-          <div className="flex justify-around items-center max-w-md mx-auto">
+        <div className="flex-1 p-4 overflow-auto">{activeTabContent}</div>
+
+        {/* Bottom Menu Tabs - Fixed at bottom */}
+        <div className="bg-white border-t border-gray-200 px-4 py-3 mt-auto">
+          <div className="flex justify-between items-center max-w-md mx-auto">
             {items.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleTabClick(item.id)}
                 className={cn(
-                  "flex flex-col items-center justify-center p-2 rounded-lg transition-colors",
-                  "min-w-[68px] h-[72px] space-y-1",
+                  "flex flex-col items-center justify-center transition-all duration-200",
+                  "min-w-[68px] h-[81px] rounded-lg relative",
                   activeTab === item.id
-                    ? "bg-blue-50 text-blue-600"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-gray-800"
                 )}
               >
-                {item.icon && (
-                  <div className="w-6 h-6 flex items-center justify-center">
-                    {item.icon}
-                  </div>
-                )}
-                <span className="text-sm font-normal text-center leading-tight">
+                {/* Label - moved to top */}
+                <span className="text-[14px] font-normal text-center leading-tight relative z-10 px-1 mb-1">
                   {item.label}
                 </span>
+
+                {/* Icon container - moved to bottom */}
+                {item.icon && (
+                  <div className="w-[50px] h-[50px] flex items-center justify-center relative z-10">
+                    {typeof item.icon === "string" ? (
+                      <Icon
+                        name={item.icon as IconName}
+                        width={40}
+                        iconColorClass={
+                          activeTab === item.id ? "bg-blue-600" : "bg-gray-600"
+                        }
+                      />
+                    ) : (
+                      item.icon
+                    )}
+                  </div>
+                )}
               </button>
             ))}
           </div>
@@ -102,17 +115,25 @@ const Tabs: React.FC<TabsProps> = ({
             )}
           >
             <div className="flex items-center space-x-2">
-              {item.icon}
+              {item.icon && (
+                typeof item.icon === 'string' ? (
+                  <Icon 
+                    name={item.icon as IconName} 
+                    width={20} 
+                    iconColorClass={activeTab === item.id ? "bg-blue-600" : "bg-gray-500"} 
+                  />
+                ) : (
+                  item.icon
+                )
+              )}
               <span>{item.label}</span>
             </div>
           </button>
         ))}
       </div>
-      
+
       {/* Tab Content */}
-      <div className="p-4">
-        {activeTabContent}
-      </div>
+      <div className="p-4">{activeTabContent}</div>
     </div>
   );
 };

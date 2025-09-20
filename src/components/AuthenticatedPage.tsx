@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { useGetProfileQuery, useLogoutMutation } from '../store/apiSlice'
-import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { logout as logoutAction, updateUser } from '../store/authSlice'
-import AuthExample from './AuthExample'
-import TestLogout from './TestLogout'
+import React, { useState, useEffect } from "react";
+import { useGetProfileQuery, useLogoutMutation } from "../store/apiSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { logout as logoutAction, updateUser } from "../store/authSlice";
+import AuthExample from "./AuthExample";
+import TestLogout from "./TestLogout";
 
 interface AuthenticatedPageProps {
-  onLogout: () => void
+  onLogout: () => void;
 }
 
 /**
@@ -14,58 +14,67 @@ interface AuthenticatedPageProps {
  * Shows the main church app content for logged-in users
  */
 const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
-  const [showAuthExample, setShowAuthExample] = useState(false)
-  const { data: profile, error: profileError, isLoading: isLoadingProfile } = useGetProfileQuery()
-  const [logout] = useLogoutMutation()
-  const dispatch = useAppDispatch()
-  const { user } = useAppSelector((state) => state.auth)
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [showAuthExample, setShowAuthExample] = useState(false);
+  const {
+    data: profile,
+    error: profileError,
+    isLoading: isLoadingProfile,
+  } = useGetProfileQuery();
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.auth);
 
   // Handle 403 errors from profile query (token expiry)
   useEffect(() => {
-    if (profileError && typeof profileError === 'object' && 'status' in profileError && (profileError as { status: number }).status === 403) {
+    if (
+      profileError &&
+      typeof profileError === "object" &&
+      "status" in profileError &&
+      (profileError as { status: number }).status === 403
+    ) {
       // Token is expired or invalid, logout user
-      localStorage.removeItem('jwt')
-      dispatch(logoutAction())
-      onLogout()
+      localStorage.removeItem("jwt");
+      dispatch(logoutAction());
+      onLogout();
     }
-  }, [profileError, onLogout, dispatch])
+  }, [profileError, onLogout, dispatch]);
 
   // Update user profile in Redux when fetched
   useEffect(() => {
     if (profile) {
-      dispatch(updateUser(profile))
+      dispatch(updateUser(profile));
     }
-  }, [profile, dispatch])
+  }, [profile, dispatch]);
 
   // Listen for online/offline status changes
   useEffect(() => {
-    const handleOnline = () => setIsOnline(true)
-    const handleOffline = () => setIsOnline(false)
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
 
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  }, [])
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
 
   /**
    * Handle user logout
    */
   const handleLogout = async () => {
     try {
-      await logout().unwrap()
+      await logout().unwrap();
     } catch (error) {
-      console.error('Logout API call failed:', error)
+      console.error("Logout API call failed:", error);
     } finally {
-      localStorage.removeItem('jwt')
-      dispatch(logoutAction())
-      onLogout()
+      localStorage.removeItem("jwt");
+      dispatch(logoutAction());
+      onLogout();
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex flex-col church-gradient text-white">
@@ -82,25 +91,25 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
             {user && (
               <div className="text-right">
                 <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs opacity-75">{user.role || 'User'}</p>
+                <p className="text-xs opacity-75">{user.role || "User"}</p>
               </div>
             )}
             {!!profileError && (
               <span className="text-sm text-red-300">Profile Error</span>
             )}
           </div>
-          
+
           {/* Online Status */}
           <span
             className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 ${
               isOnline
-                ? 'bg-green-500/20 border border-green-500/50 text-green-100'
-                : 'bg-red-500/20 border border-red-500/50 text-red-100'
+                ? "bg-green-500/20 border border-green-500/50 text-green-100"
+                : "bg-red-500/20 border border-red-500/50 text-red-100"
             }`}
           >
-            {isOnline ? '🟢 Online' : '🔴 Offline'}
+            {isOnline ? "🟢 Online" : "🔴 Offline"}
           </span>
-          
+
           {/* Logout Button */}
           <button
             onClick={handleLogout}
@@ -117,7 +126,8 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
             Welcome to Our Church Community
           </h2>
           <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto leading-relaxed">
-            Stay connected with our church family through this progressive web app.
+            Stay connected with our church family through this progressive web
+            app.
           </p>
           {profile && (
             <p className="text-base opacity-75 mt-2">
@@ -129,7 +139,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse cursor-pointer"
-            style={{ animationDelay: '0s', animationDuration: '3s' }}
+            style={{ animationDelay: "0s", animationDuration: "3s" }}
             onClick={() => setShowAuthExample(!showAuthExample)}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
@@ -142,7 +152,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
 
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse"
-            style={{ animationDelay: '1s', animationDuration: '3s' }}
+            style={{ animationDelay: "1s", animationDuration: "3s" }}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
               📅 Events
@@ -154,7 +164,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
 
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse"
-            style={{ animationDelay: '2s', animationDuration: '3s' }}
+            style={{ animationDelay: "2s", animationDuration: "3s" }}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
               🙏 Prayer Requests
@@ -166,7 +176,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
 
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse"
-            style={{ animationDelay: '3s', animationDuration: '3s' }}
+            style={{ animationDelay: "3s", animationDuration: "3s" }}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
               📖 Sermons
@@ -178,7 +188,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
 
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse"
-            style={{ animationDelay: '4s', animationDuration: '3s' }}
+            style={{ animationDelay: "4s", animationDuration: "3s" }}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
               💬 Community
@@ -190,7 +200,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
 
           <div
             className="glass-effect rounded-2xl p-6 md:p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-pulse"
-            style={{ animationDelay: '5s', animationDuration: '3s' }}
+            style={{ animationDelay: "5s", animationDuration: "3s" }}
           >
             <h3 className="text-xl md:text-2xl font-medium mb-4 text-white">
               💝 Giving
@@ -207,7 +217,8 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
             <div className="text-center mb-6">
               <h3 className="text-2xl font-medium mb-2">Authentication Demo</h3>
               <p className="opacity-75">
-                This component demonstrates the authentication APIs and token expiry handling.
+                This component demonstrates the authentication APIs and token
+                expiry handling.
               </p>
             </div>
             <div className="space-y-6">
@@ -224,7 +235,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
         </p>
       </footer>
     </div>
-  )
-}
+  );
+};
 
-export default AuthenticatedPage
+export default AuthenticatedPage;

@@ -1,0 +1,86 @@
+{
+	"info": {
+		"_postman_id": "a4330b0b-1c2d-4258-ba6b-80648267937b",
+		"name": "ccbc_joomla_login",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5734768",
+		"_collection_link": "https://aiyou-team.postman.co/workspace/5da4e0be-c5b9-4d41-b931-0fa28df1832e/collection/5734768-a4330b0b-1c2d-4258-ba6b-80648267937b?action=share&source=collection_link&creator=5734768"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"nelsoncheng0425@gmail.com\",\n    \"password\":\"1q2w3e4r5t6y\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://47.128.222.103/api/index.php/v1/ccbc_plugin/login",
+					"protocol": "http",
+					"host": [
+						"47",
+						"128",
+						"222",
+						"103"
+					],
+					"path": [
+						"api",
+						"index.php",
+						"v1",
+						"ccbc_plugin",
+						"login"
+					]
+				},
+				"description": "Generated from cURL: curl --location 'http://47.128.222.103/api/index.php/v1/ccbc_plugin/login' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n    \"username\":\"nelsoncheng0425@gmail.com\",\n    \"password\":\"1q2w3e4r5t6y\"\n}'"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Article",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "c2hhMjU2OjQzOjJjYWYyZjg2NjZjOTdiNWJjY2UwNDQzZjNhNWI3NzE5NTljNTMyZTU2YzUzODliNWQ2NmM0OWY0ZjcyOTY4Zjk=",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://47.128.222.103/api/index.php/v1/content/articles",
+					"protocol": "http",
+					"host": [
+						"47",
+						"128",
+						"222",
+						"103"
+					],
+					"path": [
+						"api",
+						"index.php",
+						"v1",
+						"content",
+						"articles"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
