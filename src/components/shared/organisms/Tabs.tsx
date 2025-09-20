@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import Icon from "@/components/shared/atoms/Icons/Icon";
 import type { IconName } from "@/components/shared/atoms/Icons/iconList";
 
@@ -20,7 +21,7 @@ interface TabsProps {
 
 /**
  * Tabs component that handles bottom navigation tabs
- * Provides tab switching functionality with icons and labels
+ * Provides tab switching functionality with icons and labels using React Router
  */
 const Tabs: React.FC<TabsProps> = ({
   tabItems,
@@ -28,13 +29,27 @@ const Tabs: React.FC<TabsProps> = ({
   onTabChange,
   className = "",
 }) => {
+  const navigate = useNavigate();
+
+  /**
+   * Handle tab navigation using React Router
+   */
+  const handleTabClick = (tabId: string) => {
+    // Navigate to the route
+    const path = tabId === "weekly" ? "/" : `/${tabId}`;
+    navigate(path);
+    
+    // Still call the onTabChange callback for any additional logic
+    onTabChange(tabId);
+  };
+
   return (
     <div className={`bg-white border-t border-gray-200 px-4 py-3 ${className}`}>
       <div className="flex justify-between items-center max-w-md mx-auto">
         {tabItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => onTabChange(item.id)}
+            onClick={() => handleTabClick(item.id)}
             className={`flex flex-col items-center justify-center transition-all duration-200 min-w-[68px] h-[81px] rounded-lg relative ${
               activeTab === item.id
                 ? "text-church-green"
