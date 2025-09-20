@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useAppSelector } from "../store/hooks";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,26 @@ import QRCodeComponent from "@/components/shared/molecules/QRCode";
  */
 const QRcodePage: React.FC = () => {
   const { logined, user } = useAppSelector((state) => state.auth);
+  
+  // State to store QR code refresh key using timestamp
+  const [qrCodeKey, setQrCodeKey] = useState<number>(Date.now());
+
+  /**
+   * Refresh QR code by updating the key with current timestamp
+   */
+  const refreshQRCode = () => {
+    setQrCodeKey(Date.now());
+  };
+
+  // Set up auto-refresh every 5 minutes (300,000 milliseconds)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshQRCode();
+    }, 5 * 60 * 1000); // 5 minutes
+
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   /**
    * Handle redirect to login page (member area)
@@ -85,6 +105,7 @@ const QRcodePage: React.FC = () => {
             {/* QR Code Display */}
             <div className="relative bg-white border-2 border-gray-200 rounded-lg p-4 shadow-sm">
               <QRCodeComponent 
+                key={qrCodeKey}
                 worshipId={getMemberID()}
                 size={256}
                 className="rounded"
@@ -104,10 +125,7 @@ const QRcodePage: React.FC = () => {
             <Button
               variant="outline"
               className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-lg transition-colors"
-              onClick={() => {
-                // In a real app, this would refresh or regenerate the QR code
-                window.location.reload();
-              }}
+              onClick={refreshQRCode}
             >
               重新整理
             </Button>
