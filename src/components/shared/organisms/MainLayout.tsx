@@ -13,9 +13,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   className = "",
 }) => {
-  return (
-    <div className={`flex-1 p-4 overflow-auto ${className}`}>{children}</div>
-  );
+  return <div className={`flex-1 overflow-auto ${className}`}>{children}</div>;
 };
 
 export default MainLayout;

@@ -7,6 +7,10 @@ interface AuthState {
     email: string
     name: string
     role?: string
+    custom_fields?: {
+      worshipid?: string
+      [key: string]: string | number | boolean | null | undefined
+    }
   } | null
   token: string | null
 }

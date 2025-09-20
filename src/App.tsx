@@ -8,6 +8,7 @@ import MainLayout from "@/components/shared/organisms/MainLayout";
 import Tabs from "@/components/shared/organisms/Tabs";
 import LoginPage from "@/components/LoginPage";
 import AuthenticatedPage from "@/components/AuthenticatedPage";
+import QRcodePage from "@/components/QRcodePage";
 import Icon from "@/components/shared/atoms/Icons/Icon";
 
 /**
@@ -96,15 +97,7 @@ function App() {
           </div>
         );
       case "qr":
-        return (
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center">
-              <Icon name="qrCode" />
-              <h2 className="text-xl font-semibold mb-2">QR Code</h2>
-              <p className="text-gray-600">QR code scanner</p>
-            </div>
-          </div>
-        );
+        return <QRcodePage />;
       case "courses":
         return (
           <div className="flex items-center justify-center h-full">
@@ -129,7 +122,7 @@ function App() {
   return (
     <LogoutProvider>
       <OneSignalInit />
-      <div className="h-screen flex flex-col">
+      <div className="h-full w-full fixed  flex flex-col">
         <Header />
         <MainLayout>{getTabContent()}</MainLayout>
         <Tabs
