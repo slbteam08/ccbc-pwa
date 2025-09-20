@@ -6,6 +6,7 @@ export default {
       colors: {
         "church-primary": "#667eea",
         "church-secondary": "#764ba2",
+        "church-green": "#009c77",
         black: "#000",
       },
       fontFamily: {

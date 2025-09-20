@@ -164,7 +164,7 @@ const AuthExample: React.FC = () => {
       <div className="space-y-3">
         <button
           onClick={testAuthCall}
-          className="w-full py-2 px-4 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+          className="w-full py-2 px-4 bg-church-green hover:bg-church-green/80 rounded-lg font-medium transition-colors"
         >
           🔄 Test Auth API Call
         </button>

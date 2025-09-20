@@ -1,5 +1,5 @@
-const getPath = (name: string) => {
-  return `/assets/icons/${name}.svg`;
+const getPath = (name: string, ext = "svg") => {
+  return `/assets/icons/${name}.${ext}`;
 };
 
 export const iconList = {
@@ -7,7 +7,7 @@ export const iconList = {
   newspaper: getPath("newspaper"),
   class: getPath("class"),
   speech: getPath("speech"),
-  qrCode: getPath("qrCode"),
+  qrCode: getPath("QR-CODE", "png"),
 };
 
 //export iconList name as const

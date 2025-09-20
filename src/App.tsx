@@ -131,9 +131,7 @@ function App() {
       <OneSignalInit />
       <div className="h-screen flex flex-col">
         <Header />
-        <MainLayout>
-          {getTabContent()}
-        </MainLayout>
+        <MainLayout>{getTabContent()}</MainLayout>
         <Tabs
           tabItems={tabItems}
           activeTab={activeTab}

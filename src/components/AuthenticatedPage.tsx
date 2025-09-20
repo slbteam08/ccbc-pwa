@@ -103,7 +103,7 @@ const AuthenticatedPage: React.FC<AuthenticatedPageProps> = ({ onLogout }) => {
           <span
             className={`px-3 py-1 rounded-full text-sm font-medium transition-all duration-300 ${
               isOnline
-                ? "bg-green-500/20 border border-green-500/50 text-green-100"
+                ? "bg-church-green/20 border border-church-green/50 text-green-100"
                 : "bg-red-500/20 border border-red-500/50 text-red-100"
             }`}
           >

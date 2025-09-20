@@ -161,7 +161,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             type="button"
             onClick={handleDemoLogin}
             disabled={isLoading}
-            className="mt-4 w-full py-3 px-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-transparent"
+            className="mt-4 w-full py-3 px-4 bg-church-green hover:bg-church-green/80 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-church-green focus:ring-offset-2 focus:ring-offset-transparent"
           >
             {isLoading ? 'Loading...' : '🚀 Try Demo Login'}
           </button>
