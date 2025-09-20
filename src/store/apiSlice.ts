@@ -132,12 +132,12 @@ export const apiSlice = createApi({
 
     /**
      * User login endpoint
-     * @param credentials - User login credentials (email/username and password)
+     * @param credentials - User login credentials (username and password)
      * @returns JWT token and user information
      */
     login: builder.mutation<
       { token: string; user: { id: string; email: string; name: string } },
-      { email: string; password: string }
+      { username: string; password: string }
     >({
       query: (credentials) => ({
         url: endpoints.login,
