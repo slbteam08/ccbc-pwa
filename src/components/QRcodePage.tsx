@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../store/hooks";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,7 @@ import QRCodeComponent from "@/components/shared/molecules/QRCode";
  */
 const QRcodePage: React.FC = () => {
   const { logined, user } = useAppSelector((state) => state.auth);
+  const navigate = useNavigate();
   
   // State to store QR code refresh key using timestamp
   const [qrCodeKey, setQrCodeKey] = useState<number>(Date.now());
@@ -39,12 +41,10 @@ const QRcodePage: React.FC = () => {
   }, []);
 
   /**
-   * Handle redirect to login page (member area)
+   * Handle redirect to login page (member area) using React Router
    */
   const handleLoginRedirect = () => {
-    // In a real app, this would use React Router or similar navigation
-    // For now, we'll trigger a page reload to go back to login
-    window.location.reload();
+    navigate('/members');
   };
 
   // If user is not logged in, show login prompt
