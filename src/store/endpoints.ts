@@ -16,4 +16,5 @@ export const API_DOMAIN = getApiDomain();
 
 export const endpoints = {
   login: `${API_DOMAIN}/index.php/v1/ccbc_plugin/login`,
+  getArticle: `${API_DOMAIN}/index.php/v1/content/articles`,
 };

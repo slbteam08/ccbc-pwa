@@ -180,6 +180,10 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    getArticle: builder.query<{ articles: string[] }, void>({
+      query: () => ({ url: endpoints.getArticle }),
+    }),
   }),
 });
 
@@ -190,4 +194,5 @@ export const {
   useGetProfileQuery,
   useRefreshTokenMutation,
   useLogoutMutation,
+  useGetArticleQuery,
 } = apiSlice;

@@ -1,86 +1,2638 @@
 {
-	"info": {
-		"_postman_id": "a4330b0b-1c2d-4258-ba6b-80648267937b",
-		"name": "ccbc_joomla_login",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5734768",
-		"_collection_link": "https://aiyou-team.postman.co/workspace/5da4e0be-c5b9-4d41-b931-0fa28df1832e/collection/5734768-a4330b0b-1c2d-4258-ba6b-80648267937b?action=share&source=collection_link&creator=5734768"
-	},
-	"item": [
-		{
-			"name": "Login",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"username\":\"nelsoncheng0425@gmail.com\",\n    \"password\":\"1q2w3e4r5t6y\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://47.128.222.103/api/index.php/v1/ccbc_plugin/login",
-					"protocol": "http",
-					"host": [
-						"47",
-						"128",
-						"222",
-						"103"
-					],
-					"path": [
-						"api",
-						"index.php",
-						"v1",
-						"ccbc_plugin",
-						"login"
-					]
-				},
-				"description": "Generated from cURL: curl --location 'http://47.128.222.103/api/index.php/v1/ccbc_plugin/login' \\\n--header 'Content-Type: application/json' \\\n--data-raw '{\n    \"username\":\"nelsoncheng0425@gmail.com\",\n    \"password\":\"1q2w3e4r5t6y\"\n}'"
-			},
-			"response": []
-		},
-		{
-			"name": "Get Article",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "c2hhMjU2OjQzOjJjYWYyZjg2NjZjOTdiNWJjY2UwNDQzZjNhNWI3NzE5NTljNTMyZTU2YzUzODliNWQ2NmM0OWY0ZjcyOTY4Zjk=",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://47.128.222.103/api/index.php/v1/content/articles",
-					"protocol": "http",
-					"host": [
-						"47",
-						"128",
-						"222",
-						"103"
-					],
-					"path": [
-						"api",
-						"index.php",
-						"v1",
-						"content",
-						"articles"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CCBC Admin API",
+    "description": "CCBC Admin API - Comprehensive backend for CCBC Platform with Joomla integration",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": ["authentication"],
+        "summary": "Login",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Token" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": ["authentication"],
+        "summary": "Get Current Admin Info",
+        "operationId": "get_current_admin_info_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Admin" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/admins/": {
+      "post": {
+        "tags": ["admin-management"],
+        "summary": "Create Admin",
+        "operationId": "create_admin_api_v1_admins__post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AdminCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Admin" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["admin-management"],
+        "summary": "Get Admins",
+        "operationId": "get_admins_api_v1_admins__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Admin" },
+                  "title": "Response Get Admins Api V1 Admins  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admins/datatable": {
+      "get": {
+        "tags": ["admin-management"],
+        "summary": "Get Admins Datatable",
+        "description": "Get admins formatted for DataTable with permissions",
+        "operationId": "get_admins_datatable_api_v1_admins_datatable_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DataTableResponse" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/admins/{admin_id}": {
+      "get": {
+        "tags": ["admin-management"],
+        "summary": "Get Admin",
+        "operationId": "get_admin_api_v1_admins__admin_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Admin Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminWithPermissions"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["admin-management"],
+        "summary": "Update Admin",
+        "operationId": "update_admin_api_v1_admins__admin_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Admin Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AdminUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Admin" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["admin-management"],
+        "summary": "Delete Admin",
+        "operationId": "delete_admin_api_v1_admins__admin_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Admin Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admins/{admin_id}/permissions": {
+      "put": {
+        "tags": ["admin-management"],
+        "summary": "Update Admin Permissions",
+        "description": "Update admin permissions for multiple modules",
+        "operationId": "update_admin_permissions_api_v1_admins__admin_id__permissions_put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "admin_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Admin Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "title": "Permissions Data" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admins/me/permissions": {
+      "get": {
+        "tags": ["admin-management"],
+        "summary": "Get My Permissions",
+        "description": "Get current admin's permissions for all modules",
+        "operationId": "get_my_permissions_api_v1_admins_me_permissions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/admins/setup-attendance-permissions": {
+      "post": {
+        "tags": ["admin-management"],
+        "summary": "Setup Attendance Permissions",
+        "description": "Initialize attendance permissions for all existing admins (requires manage permission)",
+        "operationId": "setup_attendance_permissions_api_v1_admins_setup_attendance_permissions_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/posts/": {
+      "post": {
+        "tags": ["posts"],
+        "summary": "Create Post",
+        "operationId": "create_post_api_v1_posts__post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PostCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Post" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get Posts",
+        "operationId": "get_posts_api_v1_posts__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Post" },
+                  "title": "Response Get Posts Api V1 Posts  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/posts/{post_id}": {
+      "get": {
+        "tags": ["posts"],
+        "summary": "Get Post",
+        "operationId": "get_post_api_v1_posts__post_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Post Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Post" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["posts"],
+        "summary": "Update Post",
+        "operationId": "update_post_api_v1_posts__post_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Post Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PostCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Post" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["posts"],
+        "summary": "Delete Post",
+        "operationId": "delete_post_api_v1_posts__post_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "post_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Post Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/joomla/articles": {
+      "get": {
+        "tags": ["joomla-integration"],
+        "summary": "Get Joomla Articles",
+        "description": "Get Joomla articles from the Joomla database",
+        "operationId": "get_joomla_articles_api_v1_joomla_articles_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/events/": {
+      "post": {
+        "tags": ["events-management"],
+        "summary": "Create Event",
+        "operationId": "create_event_api_v1_events__post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EventCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Event" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["events-management"],
+        "summary": "Get Events",
+        "operationId": "get_events_api_v1_events__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Event" },
+                  "title": "Response Get Events Api V1 Events  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/datatable": {
+      "get": {
+        "tags": ["events-management"],
+        "summary": "Get Events Datatable",
+        "operationId": "get_events_datatable_api_v1_events_datatable_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start index for pagination",
+              "default": 0,
+              "title": "Start"
+            },
+            "description": "Start index for pagination"
+          },
+          {
+            "name": "length",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Number of records to fetch",
+              "default": 10,
+              "title": "Length"
+            },
+            "description": "Number of records to fetch"
+          },
+          {
+            "name": "search_value",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search value",
+              "default": "",
+              "title": "Search Value"
+            },
+            "description": "Search value"
+          },
+          {
+            "name": "order_column",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Column index to sort by",
+              "default": 0,
+              "title": "Order Column"
+            },
+            "description": "Column index to sort by"
+          },
+          {
+            "name": "order_dir",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort direction (asc/desc)",
+              "default": "desc",
+              "title": "Order Dir"
+            },
+            "description": "Sort direction (asc/desc)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventDataTableResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/{event_id}": {
+      "get": {
+        "tags": ["events-management"],
+        "summary": "Get Event",
+        "operationId": "get_event_api_v1_events__event_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Event Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Event" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["events-management"],
+        "summary": "Update Event",
+        "operationId": "update_event_api_v1_events__event_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Event Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/EventCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Event" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["events-management"],
+        "summary": "Delete Event",
+        "operationId": "delete_event_api_v1_events__event_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Event Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/events/{event_id}/duplicate": {
+      "post": {
+        "tags": ["events-management"],
+        "summary": "Duplicate Event",
+        "operationId": "duplicate_event_api_v1_events__event_id__duplicate_post",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Event Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Event" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attendance/check_in": {
+      "post": {
+        "tags": ["attendance-management"],
+        "summary": "Check In Attendance",
+        "description": "Check in attendance using QR code data",
+        "operationId": "check_in_attendance_api_v1_attendance_check_in_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AttendanceCheckIn" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Attendance" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/api/v1/attendance/": {
+      "get": {
+        "tags": ["attendance-management"],
+        "summary": "Get Attendance Records",
+        "description": "Get attendance records with optional filters",
+        "operationId": "get_attendance_records_api_v1_attendance__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by event ID",
+              "title": "Event Id"
+            },
+            "description": "Filter by event ID"
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by section ID",
+              "title": "Section Id"
+            },
+            "description": "Filter by section ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Attendance" },
+                  "title": "Response Get Attendance Records Api V1 Attendance  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["attendance-management"],
+        "summary": "Create Attendance Record",
+        "description": "Create a new attendance record manually",
+        "operationId": "create_attendance_record_api_v1_attendance__post",
+        "security": [{ "HTTPBearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AttendanceCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Attendance" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attendance/datatable": {
+      "get": {
+        "tags": ["attendance-management"],
+        "summary": "Get Attendance Datatable",
+        "description": "Get attendance records for DataTable with pagination, search, and sorting",
+        "operationId": "get_attendance_datatable_api_v1_attendance_datatable_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Start index for pagination",
+              "default": 0,
+              "title": "Start"
+            },
+            "description": "Start index for pagination"
+          },
+          {
+            "name": "length",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Number of records to fetch",
+              "default": 10,
+              "title": "Length"
+            },
+            "description": "Number of records to fetch"
+          },
+          {
+            "name": "search_value",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Search value",
+              "default": "",
+              "title": "Search Value"
+            },
+            "description": "Search value"
+          },
+          {
+            "name": "order_column",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Column index to sort by",
+              "default": 0,
+              "title": "Order Column"
+            },
+            "description": "Column index to sort by"
+          },
+          {
+            "name": "order_dir",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort direction (asc/desc)",
+              "default": "desc",
+              "title": "Order Dir"
+            },
+            "description": "Sort direction (asc/desc)"
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by event ID",
+              "title": "Event Id"
+            },
+            "description": "Filter by event ID"
+          },
+          {
+            "name": "section_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by section ID",
+              "title": "Section Id"
+            },
+            "description": "Filter by section ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AttendanceDataTableResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attendance/{attendance_id}": {
+      "get": {
+        "tags": ["attendance-management"],
+        "summary": "Get Attendance Record",
+        "description": "Get a specific attendance record",
+        "operationId": "get_attendance_record_api_v1_attendance__attendance_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "attendance_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Attendance Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Attendance" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["attendance-management"],
+        "summary": "Update Attendance Record",
+        "description": "Update an attendance record",
+        "operationId": "update_attendance_record_api_v1_attendance__attendance_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "attendance_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Attendance Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AttendanceCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Attendance" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["attendance-management"],
+        "summary": "Delete Attendance Record",
+        "description": "Delete an attendance record",
+        "operationId": "delete_attendance_record_api_v1_attendance__attendance_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "attendance_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Attendance Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attendance/stats/summary": {
+      "get": {
+        "tags": ["attendance-management"],
+        "summary": "Get Attendance Summary",
+        "description": "Get attendance summary statistics",
+        "operationId": "get_attendance_summary_api_v1_attendance_stats_summary_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Filter by event ID",
+              "title": "Event Id"
+            },
+            "description": "Filter by event ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/options/banks": {
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Get Bank Options",
+        "description": "Get list of available banks for tithe receipts",
+        "operationId": "get_bank_options_api_v1_tithe_receipts_options_banks_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BankOptions" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/options/transaction-types": {
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Get Transaction Type Options",
+        "description": "Get list of available transaction types for tithe receipts",
+        "operationId": "get_transaction_type_options_api_v1_tithe_receipts_options_transaction_types_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionTypeOptions"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/": {
+      "post": {
+        "tags": ["tithe-receipts"],
+        "summary": "Create Tithe Receipt",
+        "description": "Create a new tithe receipt submission",
+        "operationId": "create_tithe_receipt_api_v1_tithe_receipts__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TitheReceiptCreate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitheReceiptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Get Tithe Receipts",
+        "description": "Get list of tithe receipts (admin only)",
+        "operationId": "get_tithe_receipts_api_v1_tithe_receipts__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 0, "title": "Skip" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "default": 100, "title": "Limit" }
+          },
+          {
+            "name": "status_filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [{ "type": "string" }, { "type": "null" }],
+              "title": "Status Filter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TitheReceiptSummary"
+                  },
+                  "title": "Response Get Tithe Receipts Api V1 Tithe Receipts  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/{receipt_id}/upload-receipt": {
+      "post": {
+        "tags": ["tithe-receipts"],
+        "summary": "Upload Receipt File",
+        "description": "Upload payment receipt file for a tithe receipt",
+        "operationId": "upload_receipt_file_api_v1_tithe_receipts__receipt_id__upload_receipt_post",
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_receipt_file_api_v1_tithe_receipts__receipt_id__upload_receipt_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/{receipt_id}": {
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Get Tithe Receipt",
+        "description": "Get a specific tithe receipt by ID (admin only)",
+        "operationId": "get_tithe_receipt_api_v1_tithe_receipts__receipt_id__get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitheReceiptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["tithe-receipts"],
+        "summary": "Update Tithe Receipt",
+        "description": "Update a tithe receipt (admin only)",
+        "operationId": "update_tithe_receipt_api_v1_tithe_receipts__receipt_id__put",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/TitheReceiptUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitheReceiptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["tithe-receipts"],
+        "summary": "Delete Tithe Receipt",
+        "description": "Delete a tithe receipt (admin only)",
+        "operationId": "delete_tithe_receipt_api_v1_tithe_receipts__receipt_id__delete",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/{receipt_id}/status": {
+      "patch": {
+        "tags": ["tithe-receipts"],
+        "summary": "Update Receipt Status",
+        "description": "Update the status of a tithe receipt (admin only)",
+        "operationId": "update_receipt_status_api_v1_tithe_receipts__receipt_id__status_patch",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TitheReceiptStatusUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TitheReceiptResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/{receipt_id}/download-receipt": {
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Download Receipt File",
+        "description": "Download the uploaded receipt file (admin only)",
+        "operationId": "download_receipt_file_api_v1_tithe_receipts__receipt_id__download_receipt_get",
+        "security": [{ "HTTPBearer": [] }],
+        "parameters": [
+          {
+            "name": "receipt_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "title": "Receipt Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tithe-receipts/statistics/summary": {
+      "get": {
+        "tags": ["tithe-receipts"],
+        "summary": "Get Tithe Statistics",
+        "description": "Get tithe receipt statistics (admin only)",
+        "operationId": "get_tithe_statistics_api_v1_tithe_receipts_statistics_summary_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Read Root",
+        "operationId": "read_root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccessControl": {
+        "properties": {
+          "admin_id": { "type": "integer", "title": "Admin Id" },
+          "module": { "type": "string", "title": "Module" },
+          "can_create": {
+            "type": "boolean",
+            "title": "Can Create",
+            "default": false
+          },
+          "can_read": {
+            "type": "boolean",
+            "title": "Can Read",
+            "default": true
+          },
+          "can_update": {
+            "type": "boolean",
+            "title": "Can Update",
+            "default": false
+          },
+          "can_delete": {
+            "type": "boolean",
+            "title": "Can Delete",
+            "default": false
+          },
+          "can_manage": {
+            "type": "boolean",
+            "title": "Can Manage",
+            "default": false
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "granted_by": { "type": "integer", "title": "Granted By" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["admin_id", "module", "id", "granted_by", "created_at"],
+        "title": "AccessControl"
+      },
+      "Admin": {
+        "properties": {
+          "username": { "type": "string", "title": "Username" },
+          "email": { "type": "string", "title": "Email" },
+          "first_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Last Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["username", "email", "id", "created_at"],
+        "title": "Admin"
+      },
+      "AdminCreate": {
+        "properties": {
+          "username": { "type": "string", "title": "Username" },
+          "email": { "type": "string", "title": "Email" },
+          "first_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Last Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "password": { "type": "string", "title": "Password" }
+        },
+        "type": "object",
+        "required": ["username", "email", "password"],
+        "title": "AdminCreate"
+      },
+      "AdminDataTableRow": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "username": { "type": "string", "title": "Username" },
+          "email": { "type": "string", "title": "Email" },
+          "first_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Last Name"
+          },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "is_active": { "type": "boolean", "title": "Is Active" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "permissions": {
+            "type": "object",
+            "title": "Permissions",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": ["id", "username", "email", "is_active", "created_at"],
+        "title": "AdminDataTableRow"
+      },
+      "AdminUpdate": {
+        "properties": {
+          "username": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Username"
+          },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "first_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Last Name"
+          },
+          "is_active": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Is Active"
+          }
+        },
+        "type": "object",
+        "title": "AdminUpdate"
+      },
+      "AdminWithPermissions": {
+        "properties": {
+          "username": { "type": "string", "title": "Username" },
+          "email": { "type": "string", "title": "Email" },
+          "first_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Last Name"
+          },
+          "is_active": {
+            "type": "boolean",
+            "title": "Is Active",
+            "default": true
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "full_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Full Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          },
+          "access_controls": {
+            "items": { "$ref": "#/components/schemas/AccessControl" },
+            "type": "array",
+            "title": "Access Controls",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["username", "email", "id", "created_at"],
+        "title": "AdminWithPermissions"
+      },
+      "Attendance": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "worship_id": { "type": "integer", "title": "Worship Id" },
+          "event_id": { "type": "integer", "title": "Event Id" },
+          "section_id": { "type": "integer", "title": "Section Id" },
+          "current_daytime": { "type": "string", "title": "Current Daytime" },
+          "check_in_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Check In Time"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          },
+          "event": { "$ref": "#/components/schemas/Event" },
+          "section": { "$ref": "#/components/schemas/EventSection" }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "worship_id",
+          "event_id",
+          "section_id",
+          "current_daytime",
+          "check_in_time",
+          "created_at",
+          "event",
+          "section"
+        ],
+        "title": "Attendance"
+      },
+      "AttendanceCheckIn": {
+        "properties": {
+          "worship_id": { "type": "integer", "title": "Worship Id" },
+          "current_daytime": { "type": "string", "title": "Current Daytime" },
+          "event_id": { "type": "integer", "title": "Event Id" },
+          "section_id": { "type": "integer", "title": "Section Id" }
+        },
+        "type": "object",
+        "required": ["worship_id", "current_daytime", "event_id", "section_id"],
+        "title": "AttendanceCheckIn"
+      },
+      "AttendanceCreate": {
+        "properties": {
+          "worship_id": { "type": "integer", "title": "Worship Id" },
+          "current_daytime": { "type": "string", "title": "Current Daytime" },
+          "event_id": { "type": "integer", "title": "Event Id" },
+          "section_id": { "type": "integer", "title": "Section Id" }
+        },
+        "type": "object",
+        "required": ["worship_id", "current_daytime", "event_id", "section_id"],
+        "title": "AttendanceCreate"
+      },
+      "AttendanceDataTableResponse": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/AttendanceDataTableRow" },
+            "type": "array",
+            "title": "Data"
+          },
+          "total": { "type": "integer", "title": "Total" },
+          "filtered": { "type": "integer", "title": "Filtered" }
+        },
+        "type": "object",
+        "required": ["data", "total", "filtered"],
+        "title": "AttendanceDataTableResponse"
+      },
+      "AttendanceDataTableRow": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "worship_id": { "type": "integer", "title": "Worship Id" },
+          "event_id": { "type": "integer", "title": "Event Id" },
+          "section_id": { "type": "integer", "title": "Section Id" },
+          "event_name": { "type": "string", "title": "Event Name" },
+          "section_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Section Name"
+          },
+          "current_daytime": { "type": "string", "title": "Current Daytime" },
+          "check_in_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Check In Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "worship_id",
+          "event_id",
+          "section_id",
+          "event_name",
+          "section_name",
+          "current_daytime",
+          "check_in_time"
+        ],
+        "title": "AttendanceDataTableRow"
+      },
+      "BankOptions": {
+        "properties": {
+          "banks": {
+            "items": {},
+            "type": "array",
+            "title": "Banks",
+            "default": ["滙豐銀行 (HSBC)", "建設銀行 (CCB)"]
+          }
+        },
+        "type": "object",
+        "title": "BankOptions"
+      },
+      "Body_upload_receipt_file_api_v1_tithe_receipts__receipt_id__upload_receipt_post": {
+        "properties": {
+          "file": { "type": "string", "format": "binary", "title": "File" }
+        },
+        "type": "object",
+        "required": ["file"],
+        "title": "Body_upload_receipt_file_api_v1_tithe_receipts__receipt_id__upload_receipt_post"
+      },
+      "DataTableResponse": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/AdminDataTableRow" },
+            "type": "array",
+            "title": "Data"
+          },
+          "total": { "type": "integer", "title": "Total" },
+          "filtered": { "type": "integer", "title": "Filtered" }
+        },
+        "type": "object",
+        "required": ["data", "total", "filtered"],
+        "title": "DataTableResponse"
+      },
+      "Event": {
+        "properties": {
+          "event_name": { "type": "string", "title": "Event Name" },
+          "venue": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Venue"
+          },
+          "remark": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remark"
+          },
+          "main_lecturer": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Main Lecturer"
+          },
+          "default_quantity": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Default Quantity",
+            "default": 0
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "created_by": { "type": "integer", "title": "Created By" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/EventSection" },
+            "type": "array",
+            "title": "Sections",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["event_name", "id", "created_by", "created_at"],
+        "title": "Event"
+      },
+      "EventCreate": {
+        "properties": {
+          "event_name": { "type": "string", "title": "Event Name" },
+          "venue": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Venue"
+          },
+          "remark": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remark"
+          },
+          "main_lecturer": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Main Lecturer"
+          },
+          "default_quantity": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Default Quantity",
+            "default": 0
+          },
+          "sections": {
+            "items": { "$ref": "#/components/schemas/EventSectionCreate" },
+            "type": "array",
+            "title": "Sections",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": ["event_name"],
+        "title": "EventCreate"
+      },
+      "EventDataTableResponse": {
+        "properties": {
+          "data": {
+            "items": { "$ref": "#/components/schemas/EventDataTableRow" },
+            "type": "array",
+            "title": "Data"
+          },
+          "total": { "type": "integer", "title": "Total" },
+          "filtered": { "type": "integer", "title": "Filtered" }
+        },
+        "type": "object",
+        "required": ["data", "total", "filtered"],
+        "title": "EventDataTableResponse"
+      },
+      "EventDataTableRow": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "event_name": { "type": "string", "title": "Event Name" },
+          "venue": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Venue"
+          },
+          "sections_count": { "type": "integer", "title": "Sections Count" },
+          "next_section": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Next Section"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": ["id", "event_name", "sections_count", "created_at"],
+        "title": "EventDataTableRow"
+      },
+      "EventSection": {
+        "properties": {
+          "section_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Section Name"
+          },
+          "lecturer": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Lecturer"
+          },
+          "sort_order": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Sort Order",
+            "default": 0
+          },
+          "quantity": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity",
+            "default": 0
+          },
+          "start_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start At"
+          },
+          "end_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End At"
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "event_id": { "type": "integer", "title": "Event Id" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["start_at", "end_at", "id", "event_id", "created_at"],
+        "title": "EventSection"
+      },
+      "EventSectionCreate": {
+        "properties": {
+          "section_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Section Name"
+          },
+          "lecturer": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Lecturer"
+          },
+          "sort_order": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Sort Order",
+            "default": 0
+          },
+          "quantity": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Quantity",
+            "default": 0
+          },
+          "start_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start At"
+          },
+          "end_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End At"
+          }
+        },
+        "type": "object",
+        "required": ["start_at", "end_at"],
+        "title": "EventSectionCreate"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginRequest": {
+        "properties": {
+          "username": { "type": "string", "title": "Username" },
+          "password": { "type": "string", "title": "Password" }
+        },
+        "type": "object",
+        "required": ["username", "password"],
+        "title": "LoginRequest"
+      },
+      "Post": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "content": { "type": "string", "title": "Content" },
+          "id": { "type": "integer", "title": "Id" },
+          "author_id": { "type": "integer", "title": "Author Id" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": ["title", "content", "id", "author_id", "created_at"],
+        "title": "Post"
+      },
+      "PostCreate": {
+        "properties": {
+          "title": { "type": "string", "title": "Title" },
+          "content": { "type": "string", "title": "Content" }
+        },
+        "type": "object",
+        "required": ["title", "content"],
+        "title": "PostCreate"
+      },
+      "TitheReceiptCreate": {
+        "properties": {
+          "chinese_name": { "type": "string", "title": "Chinese Name" },
+          "worship_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Worship Code"
+          },
+          "contact_phone": { "type": "string", "title": "Contact Phone" },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "receiving_bank": { "type": "string", "title": "Receiving Bank" },
+          "transaction_type": { "type": "string", "title": "Transaction Type" },
+          "deposit_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deposit Date"
+          },
+          "tithe_amount": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Tithe Amount",
+            "default": "0.00"
+          },
+          "thanksgiving_offering": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Thanksgiving Offering",
+            "default": "0.00"
+          },
+          "church_operating": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Church Operating",
+            "default": "0.00"
+          },
+          "building_fund": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Building Fund",
+            "default": "0.00"
+          },
+          "gospel_ministry": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Gospel Ministry",
+            "default": "0.00"
+          },
+          "love_neighbor_fund": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Love Neighbor Fund",
+            "default": "0.00"
+          },
+          "special_offering": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Special Offering",
+            "default": "0.00"
+          },
+          "special_offering_description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Special Offering Description"
+          },
+          "total_amount": {
+            "anyOf": [{ "type": "number" }, { "type": "string" }],
+            "title": "Total Amount"
+          },
+          "receipt_required": {
+            "type": "boolean",
+            "title": "Receipt Required",
+            "default": true
+          },
+          "remarks": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remarks"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chinese_name",
+          "contact_phone",
+          "receiving_bank",
+          "transaction_type",
+          "deposit_date",
+          "total_amount"
+        ],
+        "title": "TitheReceiptCreate"
+      },
+      "TitheReceiptResponse": {
+        "properties": {
+          "chinese_name": { "type": "string", "title": "Chinese Name" },
+          "worship_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Worship Code"
+          },
+          "contact_phone": { "type": "string", "title": "Contact Phone" },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "receiving_bank": { "type": "string", "title": "Receiving Bank" },
+          "transaction_type": { "type": "string", "title": "Transaction Type" },
+          "deposit_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deposit Date"
+          },
+          "tithe_amount": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Tithe Amount",
+            "default": "0.00"
+          },
+          "thanksgiving_offering": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Thanksgiving Offering",
+            "default": "0.00"
+          },
+          "church_operating": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Church Operating",
+            "default": "0.00"
+          },
+          "building_fund": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Building Fund",
+            "default": "0.00"
+          },
+          "gospel_ministry": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Gospel Ministry",
+            "default": "0.00"
+          },
+          "love_neighbor_fund": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Love Neighbor Fund",
+            "default": "0.00"
+          },
+          "special_offering": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Special Offering",
+            "default": "0.00"
+          },
+          "special_offering_description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Special Offering Description"
+          },
+          "total_amount": { "type": "string", "title": "Total Amount" },
+          "receipt_required": {
+            "type": "boolean",
+            "title": "Receipt Required",
+            "default": true
+          },
+          "remarks": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remarks"
+          },
+          "id": { "type": "integer", "title": "Id" },
+          "status": { "type": "string", "title": "Status" },
+          "processed_by": {
+            "anyOf": [{ "type": "integer" }, { "type": "null" }],
+            "title": "Processed By"
+          },
+          "processed_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Processed At"
+          },
+          "receipt_file_path": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Receipt File Path"
+          },
+          "receipt_file_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Receipt File Name"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "chinese_name",
+          "contact_phone",
+          "receiving_bank",
+          "transaction_type",
+          "deposit_date",
+          "total_amount",
+          "id",
+          "status",
+          "created_at"
+        ],
+        "title": "TitheReceiptResponse"
+      },
+      "TitheReceiptStatusUpdate": {
+        "properties": {
+          "status": { "type": "string", "title": "Status" },
+          "remarks": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remarks"
+          }
+        },
+        "type": "object",
+        "required": ["status"],
+        "title": "TitheReceiptStatusUpdate"
+      },
+      "TitheReceiptSummary": {
+        "properties": {
+          "id": { "type": "integer", "title": "Id" },
+          "chinese_name": { "type": "string", "title": "Chinese Name" },
+          "contact_phone": { "type": "string", "title": "Contact Phone" },
+          "total_amount": { "type": "string", "title": "Total Amount" },
+          "deposit_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Deposit Date"
+          },
+          "status": { "type": "string", "title": "Status" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "chinese_name",
+          "contact_phone",
+          "total_amount",
+          "deposit_date",
+          "status",
+          "created_at"
+        ],
+        "title": "TitheReceiptSummary"
+      },
+      "TitheReceiptUpdate": {
+        "properties": {
+          "chinese_name": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Chinese Name"
+          },
+          "worship_code": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Worship Code"
+          },
+          "contact_phone": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Contact Phone"
+          },
+          "email": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Email"
+          },
+          "receiving_bank": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Receiving Bank"
+          },
+          "transaction_type": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Transaction Type"
+          },
+          "deposit_date": {
+            "anyOf": [
+              { "type": "string", "format": "date-time" },
+              { "type": "null" }
+            ],
+            "title": "Deposit Date"
+          },
+          "tithe_amount": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Tithe Amount"
+          },
+          "thanksgiving_offering": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Thanksgiving Offering"
+          },
+          "church_operating": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Church Operating"
+          },
+          "building_fund": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Building Fund"
+          },
+          "gospel_ministry": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Gospel Ministry"
+          },
+          "love_neighbor_fund": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Love Neighbor Fund"
+          },
+          "special_offering": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Special Offering"
+          },
+          "special_offering_description": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Special Offering Description"
+          },
+          "total_amount": {
+            "anyOf": [
+              { "type": "number" },
+              { "type": "string" },
+              { "type": "null" }
+            ],
+            "title": "Total Amount"
+          },
+          "receipt_required": {
+            "anyOf": [{ "type": "boolean" }, { "type": "null" }],
+            "title": "Receipt Required"
+          },
+          "remarks": {
+            "anyOf": [{ "type": "string" }, { "type": "null" }],
+            "title": "Remarks"
+          }
+        },
+        "type": "object",
+        "title": "TitheReceiptUpdate"
+      },
+      "Token": {
+        "properties": {
+          "access_token": { "type": "string", "title": "Access Token" },
+          "token_type": { "type": "string", "title": "Token Type" },
+          "admin": { "$ref": "#/components/schemas/Admin" }
+        },
+        "type": "object",
+        "required": ["access_token", "token_type", "admin"],
+        "title": "Token"
+      },
+      "TransactionTypeOptions": {
+        "properties": {
+          "types": {
+            "items": {},
+            "type": "array",
+            "title": "Types",
+            "default": ["網上尸轉帳 (Transfer)", "ATM (Cash)"]
+          }
+        },
+        "type": "object",
+        "title": "TransactionTypeOptions"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": { "HTTPBearer": { "type": "http", "scheme": "bearer" } }
+  }
 }
