@@ -58,7 +58,7 @@ function SermonPage() {
           <div className="bg-red-50 border border-red-200 rounded-lg p-4">
             <h3 className="text-red-800 font-semibold mb-2">Error:</h3>
             <pre className="text-red-700 text-sm whitespace-pre-wrap overflow-auto">
-              {renderError(error) as React.ReactNode}
+              {renderError(error as unknown)}
             </pre>
           </div>
         ) : null}
