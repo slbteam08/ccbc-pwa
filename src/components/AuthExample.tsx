@@ -44,7 +44,7 @@ const AuthExample: React.FC = () => {
    */
   const handleLogin = async () => {
     try {
-      const result = await login({ email, password }).unwrap()
+      const result = await login({ username: email, password }).unwrap()
       localStorage.setItem('jwt', result.token)
       
       // Dispatch login success to Redux store
