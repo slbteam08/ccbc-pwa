@@ -13,7 +13,7 @@ const Header: React.FC = () => {
           <div className="flex items-center justify-center">
             <div className="flex-shrink-0">
               <img
-                src="/src/components/shared/molecules/Header/ccbc_logo.svg"
+                src="/assets/images/ccbc_logo.svg"
                 alt="CCBC Logo"
                 className="h-full w-auto"
               />
