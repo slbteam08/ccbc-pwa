@@ -1,0 +1,57 @@
+name: Deploy to Dev (Azure VM)
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch: # Manual trigger option
+
+jobs:
+  deploy:
+    name: Deploy to Azure VM
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🚀 Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            echo "🔄 Starting deployment..."
+            
+            sudo bash -c '
+              cd /root/ccbc-pwa
+              
+              # Pull latest code
+              echo "📥 Pulling latest code from dev branch..."
+              git fetch origin dev
+              git reset --hard origin/dev
+              
+              # Rebuild Docker image
+              echo "🔨 Rebuilding Docker image..."
+              docker compose -f docker-compose.yml build --no-cache ccbc-pwa
+              
+              # Restart containers
+              echo "♻️  Restarting containers..."
+              docker compose -f docker-compose.yml up -d ccbc-pwa
+              
+              # Show status
+              echo "✅ Deployment complete!"
+              docker compose -f docker-compose.yml ps
+              
+              # Clean up old images
+              echo "🧹 Cleaning up old Docker images..."
+              docker image prune -f
+              
+              echo "🎉 Deploy finished at $(date)"
+            '
+
+      - name: 📊 Deployment Summary
+        if: success()
+        run: |
+          echo "✅ Successfully deployed to pwa.dev.ccbc.org.hk"
+          echo "Branch: dev"
+          echo "Commit: ${{ github.sha }}"
